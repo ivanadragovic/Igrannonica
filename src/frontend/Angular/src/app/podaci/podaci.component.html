@@ -1,0 +1,1048 @@
+
+<div class="container-fluid">
+<div id="body1">
+    <div class="row p-3">
+        <div class="col-md-12 d-flex align-items-center justify-content-between px-1">
+
+            <!-- <input type="file" class="file-input" accept=".csv, .json, .xlsx, .xls, .xlsm, .xlsb, .odf, .ods, .odt" (change)="onFileSelected($event)" #fileUpload>
+    
+            <div class="file-upload okvir2">
+    
+                <button mat-mini-fab color="primary" id="ucitaj1" class="upload-btn" (click)="fileUpload.click()">
+                    Load Data
+                </button>
+                <div id="okvir1">
+                </div>
+            </div> -->
+    
+                <!--<div id="naziveksperimenta">Naziv Eksperimenta</div>-->
+            <div style="width: 50%;">
+                <div id="tekstSnapshot">Dataset version control</div>
+                <div class="d-flex align-items-center">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown">
+                            Select version
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li class="p-0"><a class="dropdown-item" role="button" class="dropdown-item" id="snapid" (click)="ucitajPodatkeSnapshota(0,'Default snapshot')" (click)="imeSnapshota('Default snapshot')">Default snapshot</a></li>
+                            <div *ngFor="let s of snapshots">
+                            <li class="p-0"><a class="dropdown-item" role="button" class="dropdown-item" id="snapid" (click)="ucitajPodatkeSnapshota(s.id,s.ime)" (click)="imeSnapshota(s.ime)">{{s.ime}}</a></li>
+                            </div>
+                        </ul>
+                    </div>
+                    <!--BRISANJE SNAPSHOTA-->
+                    <div class="space">
+                        <button id="deleteSnap" (click)="potvrdaZaBrisanjeVerzije()">
+                            <span class='text'>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/></svg>
+                            </span>
+                        </button>
+                    </div>
+                    <!-- <div class="space">
+                        <button id="sacuvaj" (click)="sacuvajTrenutnuVerziju();">Save</button>
+                    </div> -->
+                    <div class="space">
+                        <button id="sacuvajKao" data-bs-toggle="modal" data-bs-target="#ModalSaveAs">Save as</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row d-flex align-items-center justify-content-between p-1 pb-3">
+        <div class="col-md-9">
+            <div class="okvir d-flex justify-content-left ">
+
+                <div class="d-flex align-items-center" style="color: white; padding-left: 5px;">
+                    {{fileName || "Dataset is not loaded."}}
+                    <span id="poruka" class="nonvisible-y" style="margin-left: 5px; margin-right: 5px;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgb(116, 168, 102)" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                      </svg></span>
+                    <span id="porukaGreske" class="nonvisible-n"></span>
+                </div>
+                
+                <div id="brojRedovaTabelePoruka">
+                    <div id="odabir-redova">Rows displayed:</div>
+                    <span>
+                        <select id="brojRedovaTabele" (change)="promeniBrojRedova(selectField.value);" #selectField>
+                            <option value="5">5</option>
+                            <option selected value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </span>
+                </div>
+                <div style="width: 100%;" class="d-flex align-items-center">
+                    <button id="sve-kolone" (click)="selectAllColumns($event)">Select All Columns</button>
+                    <!-- <button id="izbaci-selekt-kolone" (click)="deleteColumns()">Izbaci selektovane kolone</button> -->
+                    <button id="svi-redovi" (click)="selectAllRows($event)">Select All Rows</button>
+                    <!-- <button id="izbaci-selekt-vrste" (click)="deleteRows()">Izbaci selektovane redove</button> -->
+                    <button id="izbaci-selekt-vrste" (click)="dodavanjeNovogReda()">Add row</button>
+                    <button id="izbaci-selekt-vrste" (click)="brisanjeVrednosti()">Delete selected</button>
+                <!--  <button id="clear-tracker" (click)="obrisiIstoriju()">Obrisi istoriju</button>-->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 d-flex">
+            <div class="d-flex okvir justify-content-center" style="width: 100%;">
+               <!-- <div class="col-sm-7"> <button id="dugmeIstorija" type="button" class="btn btn-secondary" style=" border-radius: 10px; background-color: #6070a7; box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.5);">Pogledaj istoriju</button> </div> -->
+               <div style="width: 40%; margin-right: 10%;" class="justify-content-center">
+                    <!-- Button trigger modal -->
+                    <button type="button" id="dugmeIstorija" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" style=" border-radius: 6px;">
+                        History
+                    </button>
+               </div>
+                <div class="d-flex justify-content-center">        
+                    <button id="undoRedoDugme" (click)="tryUndoAction()" style="font-size:22px;color:#CED9FF;"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/>
+                        <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/>
+                      </svg></button>  
+                    <button id="undoRedoDugme" (click)="tryRedoAction()" style="font-size:22px;color:#CED9FF;"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                        <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                      </svg></button> 
+                </div>   
+            </div>
+        </div>
+    </div>
+    <!--
+    <div class="row d-flex align-items-center justify-content-between p-1 pt-4" >
+        <div class="col-md-9">
+            <div class="okvir visinaPodesavanja">
+                <div class="naslov">Vizuelizacija podataka</div>
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+            <div class="okvir visinaPodesavanja">
+                
+            </div>
+        </div>
+    </div>-->
+
+
+    <!-- <div id="box">
+        <div id="testniskup" class="p1 placement">
+            <div id="naslov">Testni skup</div>
+
+            <div ngbDropdown class="d-inline-block">
+                <button class="btn btn-design" id="dropdownBasic1" ngbDropdownToggle>Izaberi</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                  <button ngbDropdownItem id="proizvoljanUnosVrednosti" (click)="izborUnosa('Proizvoljno')">Unos željenih vrednosti</button>
+                  <button ngbDropdownItem id="ucitajTestniSkup" (click)="izborUnosa('Testni skup')">Učitaj testni skup</button>
+                </div>
+            </div>
+
+            <div id="testniskup-comp">
+
+                <div id="unos-fajla" class="invisible-testniskup"> 
+                    <form id="forma-test">
+                        <div class="form-group">       
+                            <label id="label-input" for="exampleFormControlFile1">
+                                <img src="assets/uploadfile.png"> 
+                                &nbsp; Ucitaj podatke</label>                 
+                            <input type="file" class="form-control-file" accept=".csv" id="exampleFormControlFile1" (change)="onFileSelectedTest($event)">
+                            <span style="color:white;  text-align: center; font-size: 14px;">{{fileNameTest || "Podaci nisu učitani."}} </span>
+                        </div>
+                      </form>
+                </div>
+
+
+                <div id="proizvoljan-unos" class="visible-unos">
+                    <div id="slider">
+                        <div style="margin: auto; color: #c1cdff; position: relative; top: -30px;">Uneti vrednost iz intervala [0,1]</div>
+                        <div id="current-value">50%</div>
+                        
+                        <input type="range" min="0" max="1" step="0.01" value="0.5" (change)="ispisRatio()" id="input-ratio">
+                    </div>
+                    <br><br>
+                    <div id="div-ratio">
+                        <input type="number" min="0" max="1" step="0.01" id="vrednost-ratio" placeholder="0.5" (change)="upisRatio()">  
+                        <button id="btn-ratio" (click)="setRatio()">Primeni</button>
+                    </div>   
+                </div>
+            </div>
+        </div>
+        <div id="nedostajucevrednosti" class="placement">
+            <div id="header-help">
+                <div id="naslov">Nedostajuće vrednosti</div>
+                <div id="helper"> 
+                    <span  class="hovertext" data-tooltip="Zamena praznih stringova sa NA:
+                          - Za odabrane kategorije (kolone)
+                          Zamena 0 sa NA:
+                          - Za odabrane kolone sa numerickim vrednostima">
+                    &#63;
+                    </span>
+                </div>
+            </div>
+            <div id="select-elements">
+
+                <div ngbDropdown class="dropdown" id="zamena-select">
+                    <button ngbDropdownToggle class="btn btn-design2 dropdown-toggle" type="button" id="dropdownMenuButton" data-mdb-toggle="dropdown" aria-expanded="false">
+                      Zamena NA vrendosti
+                    </button>
+                    <ul ngbDropdownMenu class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li ngbDropdownItem><a role="button" class="dropdown-item" (click)="fillWithMean()">Zameni NA sa mean u koloni</a></li>
+                        <li ngbDropdownItem><a role="button" class="dropdown-item" (click)="fillWithMedian()">Zameni NA sa median u koloni</a> </li>
+                        <li ngbDropdownItem><a role="button" class="dropdown-item" (click)="fillWithMode()">Zameni NA sa mode u koloni</a> </li>
+                        <div class="dropdown-divider"></div>
+                        <li ngbDropdown>
+                            <a class="dropdown-item" id="sub-menu1">
+                               Linearna regresija  &nbsp; &nbsp;&nbsp;  &#10148;
+                            </a>
+                            <ul ngbDropdownMenu class="dropdown-menu dropdown-submenu">
+                                <div *ngFor="let fieldValue of dajNaziveHeadera(); let i = index" >
+                                <li ngbDropdownItem> <a role="button" class="dropdown-item" (click)="selectForRegression($event,i)">{{fieldValue}}</a></li>   
+                                </div>                      
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+               
+
+                <div ngbDropdown class="d-inline-block">
+                    <button class="btn btn-design2" id="dropdownBasic3" ngbDropdownToggle>Brisanje NA vrednosti</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic3" id="menu1">
+                      <button ngbDropdownItem (click)="deleteAllRowsWithNA()">Izbaci sve vrste sa NA vrednostima</button>
+                      <button ngbDropdownItem (click)="deleteAllColumnsWithNA()">Izbaci sve kolone sa NA vrednostima</button>
+                      <button ngbDropdownItem (click)="deleteRowsWithNAforSelectedColumns()">Izbaci sve vrste sa NA za izabrane kolone</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="opcije-nv">
+                <div id="prazni-string">
+                   <div>Zamena praznih stringova sa NA:</div>
+                   <button id="b1" (click)="replaceEmptyWithNA()">Primeni</button> 
+               </div>
+            
+                <div id="zamena-nula">
+                        <div>Zamena 0 sa NA:</div>
+                        <button id="b2" (click)="replaceZeroWithNA()">Primeni</button> 
+                </div>
+            </div>
+            <div id="regresija-nv">
+                <input type="text" id="regresija-input" placeholder="Regresija:" readonly>
+                <button id="btn-reg" (click)="primeniZaRegression()">Primeni</button> 
+            </div>
+
+           
+            
+        </div>
+        <div id="enkodiranje" class="p2 placement">
+            <div id="naslov">Enkodiranje</div>
+            <button id="b4" (click)="labelEncoding()">LabelEncode</button> 
+            <button id="b5" (click)="oneHotEncoding()">One-hotEncode</button> 
+        </div>
+    </div>
+
+    <div id="box2">
+    
+        <div id="normalizacija">
+            <div id="header-help">
+                <div id="naslov">Normalizacija</div>
+                <div id="helper"> 
+                    <span  class="hovertext-left" data-tooltip="- Odabrati željeni tip normalizacije
+                        - Selektovati željene kolone 
+                        - Primenite podešene vrednosti ">
+                    &#63;
+                    </span>
+                </div>
+            </div>
+
+            <div id="norm-box">
+                <div ngbDropdown class="d-inline-block">
+                    <button class="btn btn-design3" id="norm-btn" ngbDropdownToggle>Izaberite tip normalizacije</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                      <button ngbDropdownItem id="absolute-max" (click)="selectNorm($event)">Absolute Maximum Scaling</button>
+                      <button ngbDropdownItem id="minmax" (click)="selectNorm($event)">Min-Max Scaling</button> 
+                      <button ngbDropdownItem id="zscore" (click)="selectNorm($event)">Z-score Scaling</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary primeni-izuzeci" (click)="primeniNormalizaciju()">Primeni</button>
+            </div>
+        </div>
+    
+        <div id="polje">
+            <div id="header-help">
+                <div id="naslov">Podaci</div>
+                <div id="helper"> 
+                    <span  class="hovertext-left" data-tooltip="Funkcije za upravljanje
+                                  podacima tabele">
+                    &#63;
+                    </span>
+                </div>
+            </div>
+
+            <div id="podaci-box">
+                <div ngbDropdown class="d-inline-block">
+                    <button class="btn btn-design2" id="select-data" ngbDropdownToggle>Upravljanje podacima</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic3" id="menu1">
+                        <button ngbDropdownItem (click)="selectData($event)" id="izbaci-selekt-vrste">Izbaci selektovane vrste</button>
+                        <button ngbDropdownItem (click)="selectData($event)" id="izbaci-selekt-kolone">Izbaci selektovane kolone</button>
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-primary primeni-izuzeci" id="btn-data" (click)="primeniNaPodatke()">Primeni</button>
+            </div>
+
+        </div>
+
+        <div id="outliers">
+            <div id="header-help">
+                <div id="naslov">Netipične vrednosti</div>
+                <div id="helper"> 
+                    <span class="hovertext" data-tooltip="Uobičajene vrednosti praga:
+
+                        Standard Deviation: 2
+                        Quantiles: ( 0.1, 0.25 )
+                        Z-score: ( -3, +3 ) 
+                        ">
+                        &#63;
+                      </span>
+                </div>
+            </div>
+
+            <div id="outliers-box">
+                <div ngbDropdown class="d-inline-block">
+                    <button class="btn btn-design4" id="outlier-btn" ngbDropdownToggle>Izbacivanje izuzetaka</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                      <button ngbDropdownItem id="option-sd" (click)="selectOutliers($event)">Standard Deviation</button>
+                      <button ngbDropdownItem id="option-quantiles" (click)="selectOutliers($event)">Quantiles</button> 
+                      <button ngbDropdownItem id="option-zscore" (click)="selectOutliers($event)">Z-Score</button>
+                      <button ngbDropdownItem id="option-iqr" (click)="selectOutliers($event)">IQR</button>
+                      <button ngbDropdownItem id="option-isolation" (click)="selectOutliers($event)">Isolation Forest</button>
+                      <button ngbDropdownItem id="option-svm" (click)="selectOutliers($event)">One Class SVM</button>
+                      <button ngbDropdownItem id="option-lfactor" (click)="selectOutliers($event)">Local Factor</button>
+                    </div>
+                </div>
+
+                <input type="number" id="threshold" placeholder="Prag:" readonly>
+
+                <button type="button" class="btn btn-primary primeni-izuzeci" (click)="removeOutliers()">Primeni</button>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- Tooltips -->
+    <span id="tooltip-test" class="hovertext" (mouseleave)="hideTooltip('test')" data-tooltip=
+        "       Create test dataset
+
+        Test dataset can be defined in 2 ways:
+        1) Random train-test split - Rows of currently 
+          loaded dataset divided into train and test sections. 
+          Each section share determined by ratio parameter.
+        2) Load from file - Load test rows from file. All
+          previously loaded rows will be labeled for training. 
+          Supported file formats: CSV, Excel, JSON.
+        ">
+    </span>
+    <span id="tooltip-encoding" class="hovertext" (mouseleave)="hideTooltip('encoding')" data-tooltip=
+        "      Encode selected columns
+
+        Only categorical columns can be encoded.
+        
+        Supported methods:
+        1) Label encoding - Encodes column categories into
+          natural numbers from [0] to [number of classes - 1] 
+        2) One-hot encoding - Creates a new column for each
+          category. A column of a class will be set to 1 only
+          for rows of that class, 0 otherwise.
+        ">
+    </span>
+    <span id="tooltip-outlier" class="hovertext" (mouseleave)="hideTooltip('outlier')" data-tooltip=
+        "     Remove outliers
+        
+        Remove outlier rows for selected columns.
+        Only applicable to numerical columns.
+        Which rows are classified as outliers
+        is determined by the detection method.
+
+        The following methods require threshold
+        hyperparameter (positive real numbers):
+        1) Standard Deviation - Usually around 2. 
+        2) Quantiles - Must be smaller than one.
+          Typical values range from 0.1 to 0.25.
+        3) Z-score - Usually 3 or larger.
+        ">
+    </span>
+    <span id="tooltip-normalization" class="hovertext" (mouseleave)="hideTooltip('normalization')" data-tooltip=
+        "     Data normalization
+        
+        Scales selected numerical columns.
+        Supported methods:
+        1) Absolute max scaling - Scales columns
+          from (-max, +max) to (-1, 1), where
+          `max` is absolute maximum of a column. 
+        2) Min-Max scaling - Scales columns
+          from(min, max) to (0, 1).
+        3) Z-score scaling - Scales columns in
+          accordance to their z-score value.
+        ">
+    </span>
+    <span id="tooltip-na" class="hovertext" (mouseleave)="hideTooltip('na')" data-tooltip=
+        "     Missing values handling
+
+        Empty and zero fields of selected columns
+        can be automatically categorized as NA values.
+
+        Methods for dropping missing values:
+        1) Row wise - Drops all NA rows from dataset
+        2) Column wise - Drops all NA columns from
+          dataset
+        3) Pair wise - Drops all NA rows of from
+          selected columns
+
+        Methods for imputing NA values:
+        1) Mean, Median, Mode - Computes said metric
+          and replacesNA fields with it.
+        2) Value - Replaces NA fields with given value
+        3) Regression - creates linear regression
+          between selected columns and one NA column. 
+        ">
+    </span>
+    <span id="tooltip-plot" class="hovertext" (mouseleave)="hideTooltip('plot')" data-tooltip=
+        "        Data Visualization
+
+        Draws selected diagram for selected columns.
+
+        Supported plots:
+        1) Scatter    - up to 6 numerical columns
+        2) Box    - 1 numerical + 1 categorical (optional)
+        3) Violin    - 1 numerical + 1 categorical (optional) 
+        4) Bar     - up to 2 categorical columns
+        5) Histogram - up to 4 numerical columns
+        6) Hexbin     - Exactly 2 numerical columns
+        7) Density    - up to 6 numerical columns
+        ">
+    </span>
+
+    <div class="row d-flex align-items-center justify-content-between p-1" id="tabela-podesavanja">
+        <div page class="col-md-9">
+            <div class="okvir" id="table">
+                <div class="naslov">
+                    <span id="ucitaniPodaci-naslov" style=" background-color: #5e609150; border-bottom: 1px solid rgb(160, 181, 189); border-top-left-radius: 2px; border-top-right-radius: 2px;" (click)="prikaziUcitanePodatke($event)" (click)="dodajTipovePoredKolona(this.nizTipova)" >Dataset</span> &nbsp; &nbsp; &nbsp; <span id="statPodaci-naslov" (click)="prikaziStatistickePodatke($event)"> Statistics </span>      
+                    <span style="position: absolute; left:8%; "><button  id="dugmecsv" (click)="preuzmiDataset()" >Download Dataset</button></span>
+                </div>
+                <div id="skrol" class="col-md-12">
+                    <table *ngIf="this.indikator; else statistika">
+                        <tr class="head-table">
+                            <th *ngFor="let header of dajHeadere();  let j = index" class="tr-button" (click)="getData(j, header.slice(1))" [class.selectedColHeader]="isSelectedNum(j)">
+                                <div class="d-flex justify-content-left align-items-center " style="min-width: fit-content;" >
+                                 <div style="margin-right: 5px;"> {{header}}</div> <div id="{{j}}column" class="d-flex justify-content-center align-items-center span-toggle" style=" width: 13px; height: 13px; font-size: smaller; border-radius: 50%; padding-top: 1px;" (click)="zamenaTipaKolone($event)" ></div> 
+                                </div>
+                             </th>
+                        </tr>
+                        <tr class="trbody" *ngFor="let red of json | paginate
+                        : {
+                            itemsPerPage: itemsPerPage,
+                            currentPage: page,
+                            totalItems: totalItems
+                        };  index as i" (click)="getRow(i,this.page)">
+                            <td *ngFor="let fieldValue of dajRed(i); let j = index" [class.selectedCol]="isSelectedNum(j)" [class.selectedRow]="isSelectedRow(i)">
+                                <input type="text" value="{{fieldValue}}" id="input-data" (change)="izmeniPolje(i,j,this.page,$event.target)">
+                            </td>
+                        </tr>
+                    </table>
+
+                    <ng-template #statistika>
+                     
+                        <div class="accordion" id="accordionPanelsStayOpenExample">
+                           
+                            <div class="statistika-tip">
+                                <button class="accordion-button collapsed btn-coll" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNum" aria-expanded="false" aria-controls="collapseNum">
+                                    <span style=" position:sticky; left:25px; display: inline-block;">Numerical statistics</span>
+                                </button>
+                                <div class="collapse" id="collapseNum">
+                                    <table id="numericka-tabela">
+                                        <tr class="head-table">
+                                            <th style="width:200px" *ngFor="let naslov of dajNaziveKolonaStatistikeNum();">
+                                                {{naslov}}
+                                            </th>
+                                        </tr>
+                                        <tr class="trbodyy" *ngFor="let red of this.nizRedovaStatistika">
+                                            <td style="width:200px" class="td-tabela-stat" *ngFor="let fieldValue of red;"  >
+                                                {{fieldValue}}
+                                            </td>
+                                        </tr>
+                                        
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="statistika-tip">
+                                <button class="accordion-button collapsed btn-coll" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCat" aria-expanded="false" aria-controls="collapseCat">
+                                    <span style=" position:sticky; left:25px; display: inline-block;">Categorical statistics</span>
+                                </button>
+                                <div class="collapse" id="collapseCat">
+
+                                    <div *ngFor="let element of statistikaCat; index as i" style="display: flex; margin-left: 40px;">
+                                  
+                                        <span style="border-bottom-right-radius:30px; height: 200px; width:100px; margin-top: 10px; background-color: #5d3372a8; color: #a7baff; font-weight: bolder;">{{element.key}}</span>
+                                        <div *ngFor="let item of element.data" style=" margin: 10px 0px;">
+                                            <div class="uvuceno">
+                                                <div class="item" *ngIf="item.imeKljucVC">
+                                                  {{item.imeKljucVC}}: {{item.ValidCount}}
+                                                </div>
+                                            <div class="item" *ngIf="item.imeKljucNC">
+                                              {{item.imeKljucNC}}: {{item.NaCount}}
+                                            </div>
+                                            <div class="item" *ngIf="item.imeKljucUC">
+                                              {{item.imeKljucUC}}: {{item.UniqueCount}}
+                                             </div>
+                                            <div *ngIf="item.Frequencies">
+                                                <div *ngFor="let freq of item.Frequencies; index as i">
+                                                    <div *ngIf="i==0">
+                                                        Most Common: &nbsp; <br> <div class="uvuceno">{{item.Frequencies[i][0]}}: &nbsp; {{item.Frequencies[i][1]}}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div *ngIf="item.imeKljucF">
+                                                <div style="width: 220px; ">
+                                                    <canvas baseChart
+                                                    [data]="lineDatas[i]"
+                                                    [options]="chartOptions"
+                                                    [type]="pieChartType"
+                                                >
+                                                </canvas>
+                                                </div>
+                                            </div> 
+                                        </div>
+
+                                        <!-- <div style="width: 10%; height: 10%; " *ngIf="pieplot"><img [src]="pieplot" class="img-fluid " alt="Responsive image"></div> -->
+                                    </div>
+                                    <hr>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                          </div>
+                </ng-template>
+
+                </div>
+            </div>
+
+            <ngb-pagination class="d-flex justify-content-center" *ngIf="this.json != undefined" [rotate]="true" (pageChange)="gty(page = $event)" [pageSize]="this.itemsPerPage" [collectionSize]="this.totalItems" [(page)]="this.page" [maxSize]="5" [boundaryLinks]="true"></ngb-pagination>
+      
+        </div>
+
+        <div class="col-md-3 justify-content-center align-items-center">
+            <div class="p-2 okvir visinaPodesavanja" id="manipulacijaPodacima" style="overflow-y: auto">
+                <div class="naslov"><div class="tekstNaslova">Data manipulation / Test dataset</div></div>
+                <div class="podesavanja">
+                    <div class="podesavanje">
+                        <button class="accordion-button collapsed dugmeCollapse" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTestniSkup" aria-expanded="false" aria-controls="collapseTestniSkup">
+                            Test Dataset
+                        </button>
+                        <div class="collapse" id="collapseTestniSkup">
+                            <div id="header-help">
+                                <div id="helper-test" class="helper" (mouseenter)="showTooltip('test')">
+                                    <div style="margin-left: 5.5px; margin-top: -1px">&#63;</div>
+                                </div>
+                            </div>
+                            <div ngbDropdown class="d-inline-block" style="width: 100%;">
+                                <div class="pom">
+                                    <button class="btn btn-design2 dugme" id="dropdownBasic1" ngbDropdownToggle>Select input method</button>
+                                </div>
+                                <div ngbDropdownMenu class="menu1" aria-labelledby="dropdownBasic1">
+                                  <button ngbDropdownItem id="proizvoljanUnosVrednosti" (click)="izborUnosa('Proizvoljno')">Random train-test split</button>
+                                  <button ngbDropdownItem id="ucitajTestniSkup" (click)="izborUnosa('Testni skup')">Load from file</button>
+                                </div>
+                            </div>
+                
+                            <div id="testniskup-comp">
+                
+                                <div id="unos-fajla" class="invisible-testniskup"> 
+                                    <form id="forma-test">
+                                        <div class="form-group">       
+                                            <label id="label-input" for="exampleFormControlFile1">
+                                                <img src="assets/uploadfile.png"> 
+                                                &nbsp; Load test dataset</label>                 
+                                            <input type="file" class="form-control-file" accept=".csv, .json, .xlsx, .xls, .xlsm, .xlsb, .odf, .ods, .odt" id="exampleFormControlFile1" (change)="onFileSelectedTest($event)">
+                                            <span style="color: rgb(216, 221, 251);  text-align: center; font-size: 14px;">{{fileNameTest || "Dataset is not loaded."}} </span>
+                                        </div>
+                                      </form>
+                                </div>
+                
+                
+                                <div id="proizvoljan-unos" class="visible-unos">
+                                    <div id="slider">
+                                        <div class="d-flex justify-content-center" style="height: 100%;">
+                                            <div class="d-flex justify-content-between align-items-center" id="infoTrainTestSplit">
+                                                <div>Test: <span id="procenatTestni">50</span><span class="proc">%</span></div>
+                                                <div>Train: <span id="procenatTrening">50</span><span class="proc">%</span></div>
+                                            </div>
+                                        </div>
+                                        <div style="margin: auto; color: #c1cdff; margin-bottom: 10px;">Pick split ratio:</div>
+                                        <!-- <div id="current-value">50%</div>
+                                        
+                                        <input type="range" min="0" max="1" step="0.01" value="0.5" (change)="ispisRatio()" id="input-ratio"> -->
+                                        <div id="sliderHolder">
+                                            <ngx-slider class="custom-slider" (userChangeEnd)="ispisRatio()" id="input-ratio" [(value)]="value" [options]="options"></ngx-slider>
+                                        </div>
+                                    </div>
+                                    <br><br>
+                                    <div id="div-ratio">
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <input type="number" value="50" min="1" max="100" step="1" id="vrednost-ratio" placeholder="50%" (change)="upisRatio()"><div id="procenat">%</div> 
+                                        </div>
+                                        <button class="btn btn-primary" id="btn-ratio" (click)="setRatio()">Apply</button>
+                                    </div>   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="podesavanje">
+                        <button class="accordion-button collapsed dugmeCollapse" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEnkodiranje" aria-expanded="false" aria-controls="collapseEnkodiranje">
+                            Encoding
+                        </button>
+                        <div class="collapse" id="collapseEnkodiranje">
+                            <div id="header-help">
+                                <div id="helper-encoding" class="helper" (mouseenter)="showTooltip('encoding')">
+                                    <div style="margin-left: 5.5px; margin-top: -1px">&#63;</div>
+                                </div>
+                            </div>
+                            <div id="enkodiranjeHolder">
+                                <button class="btn btn-primary" id="b4" (click)="labelEncoding()">Label Encode</button> 
+                                <button class="btn btn-primary" id="b5" (click)="oneHotEncoding()">One-hot Encode</button> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="podesavanje">
+                        <button class="accordion-button collapsed dugmeCollapse" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOutlieri" aria-expanded="false" aria-controls="collapseOutlieri">
+                            Outlier handling
+                        </button>
+                        <div class="collapse" id="collapseOutlieri">
+                            <div id="header-help">
+                                <div id="helper-outlier" class="helper" (mouseenter)="showTooltip('outlier')">
+                                    <div style="margin-left: 5.5px; margin-top: -1px">&#63;</div>
+                                </div>
+                            </div>
+                            <div id="outliers-box">
+                                <div ngbDropdown class="d-inline-block" style="width: 100%;">
+                                    <div class="pom">
+                                        <button class="btn btn-design2 dugme" id="outlier-btn" ngbDropdownToggle>Detection method</button>
+                                    </div>
+                                    <div ngbDropdownMenu class="menu1" aria-labelledby="dropdownBasic1">
+                                      <button ngbDropdownItem id="option-sd" (click)="selectOutliers($event)">Standard Deviation</button>
+                                      <button ngbDropdownItem id="option-quantiles" (click)="selectOutliers($event)">Quantiles</button> 
+                                      <button ngbDropdownItem id="option-zscore" (click)="selectOutliers($event)">Z-Score</button>
+                                      <button ngbDropdownItem id="option-iqr" (click)="selectOutliers($event)">IQR</button>
+                                      <button ngbDropdownItem id="option-isolation" (click)="selectOutliers($event)">Isolation Forest</button>
+                                      <button ngbDropdownItem id="option-svm" (click)="selectOutliers($event)">One Class SVM</button>
+                                      <button ngbDropdownItem id="option-lfactor" (click)="selectOutliers($event)">Local Factor</button>
+                                    </div>
+                                </div><br>
+                                <input type="number" id="threshold" placeholder="Threshold:" readonly><br>
+                
+                                <button type="button" class="btn btn-primary primeni-izuzeci" (click)="removeOutliers()">Drop</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="podesavanje">
+                        <button class="accordion-button collapsed dugmeCollapse" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNormalizacija" aria-expanded="false" aria-controls="collapseNormalizacija">
+                            Normalization
+                        </button>
+                        <div class="collapse" id="collapseNormalizacija">
+                            <div id="header-help">
+                                <div id="helper-normalization" class="helper" (mouseenter)="showTooltip('normalization')">
+                                    <div style="margin-left: 5.5px; margin-top: -1px">&#63;</div>
+                                </div>
+                            </div>
+                            <div id="norm-box">
+                                <div ngbDropdown class="d-inline-block" style="width: 100%;">
+                                    <div class="pom">
+                                        <button class="btn btn-design2 dugme" id="norm-btn" ngbDropdownToggle>Scaling method</button>
+                                    </div>
+                                    <div ngbDropdownMenu class="menu1" aria-labelledby="dropdownBasic1">
+                                      <button ngbDropdownItem id="absolute-max" (click)="selectNorm($event)">Absolute Maximum Scaling</button>
+                                      <button ngbDropdownItem id="minmax" (click)="selectNorm($event)">Min-Max Scaling</button> 
+                                      <button ngbDropdownItem id="zscore" (click)="selectNorm($event)">Z-score Scaling</button>
+                                    </div>
+                                </div><br>
+                                <button type="button" class="btn btn-primary primeni-izuzeci" (click)="primeniNormalizaciju()">Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="podesavanje">
+                        <button class="accordion-button collapsed dugmeCollapse" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNedVr" aria-expanded="false" aria-controls="collapseNedVr">
+                            Missing values
+                        </button>
+                        <div class="collapse" id="collapseNedVr">
+                            <div id="header-help">
+                                <div id="helper-na" class="helper" (mouseenter)="showTooltip('na')">
+                                    <div style="margin-left: 5.5px; margin-top: -1px">&#63;</div>
+                                </div>
+                            </div>
+                            <div id="select-elements">
+                                <div id="pomocniDiv">
+                                    <div id="opcije-nv">
+                                        <div id="prazni-string">
+                                           <div class="imeAkcije">Replace empty with NA:</div>
+                                           <button class="btn btn-primary" id="b1" (click)="replaceEmptyWithNA()">Apply</button> 
+                                       </div>
+                                    
+                                        <div id="zamena-nula">
+                                            <div class="imeAkcije">Replace 0 with NA:</div>
+                                            <button class="btn btn-primary" id="b2" (click)="replaceZeroWithNA()">Apply</button> 
+                                        </div>
+                                    </div>
+                                    <div ngbDropdown class="d-inline-block">
+                                        <button class="btn btn-design2 dugme" id="dropdownBasic3" ngbDropdownToggle>Drop NA</button>
+                                        <div ngbDropdownMenu aria-labelledby="dropdownBasic3" class="menu1">
+                                          <button ngbDropdownItem (click)="deleteAllRowsWithNA()">Rows</button>
+                                          <button ngbDropdownItem (click)="deleteAllColumnsWithNA()">Columns</button>
+                                          <button ngbDropdownItem (click)="deleteRowsWithNAforSelectedColumns()">Rows for selected columns</button>
+                                        </div>
+                                    </div>
+                                <div class="okvirZaNA">
+                                <div ngbDropdown class="dropdown" class="zamena-select">
+                                    <button ngbDropdownToggle class="btn btn-design2 dropdown-toggle dugme" type="button" id="dropdownMenuButton" data-mdb-toggle="dropdown" aria-expanded="false">
+                                      Replace NA with
+                                    </button>
+                                    <ul ngbDropdownMenu class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <li ngbDropdownItem><a role="button" class="dropdown-item" (click)="fillWithMean()">Mean</a></li>
+                                        <li ngbDropdownItem><a role="button" class="dropdown-item" (click)="fillWithMedian()">Median</a> </li>
+                                        <li ngbDropdownItem><a role="button" class="dropdown-item" (click)="fillWithMode()">Mode</a> </li>
+                                        <li ngbDropdownItem><a role="button" class="dropdown-item" (click)="replaceNaValue()">Value</a> </li>
+                                        <!-- <div class="dropdown-divider"></div> -->
+                                        <!-- <li ngbDropdown>
+                                            <a class="dropdown-item" id="sub-menu1">
+                                               Linearna regresija  &nbsp; &nbsp;&nbsp;  &#10148;
+                                            </a>
+                                            <ul ngbDropdownMenu class="dropdown-menu dropdown-submenu">
+                                                <div *ngFor="let fieldValue of dajNaziveHeadera(); let i = index" >
+                                                <li ngbDropdownItem> <a role="button" class="dropdown-item" (click)="selectForRegression($event,i)">{{fieldValue}}</a></li>   
+                                                </div>                      
+                                            </ul>
+                                        </li> -->
+                                    </ul>
+                                </div>
+                                <div ngbDropdown class="dropdown" class="zamena-select">
+                                    <button ngbDropdownToggle class="btn btn-design2 dugme" type="button" id="dropdownLinReg">
+                                        Linear regression
+                                    </button>
+                                    <ul ngbDropdownMenu class="dropdown-menu" aria-labelledby="dropdownLinReg">
+                                        <div *ngFor="let fieldValue of dajNaziveHeadera(); let i = index" >
+                                        <li ngbDropdownItem> <a role="button" class="dropdown-item" (click)="selectForRegression($event,i)">{{fieldValue}}</a></li>   
+                                        </div>                      
+                                    </ul>
+                                </div>
+                                <div id="regresija-nv">
+                                    <input type="text" id="regresija-input" placeholder="Regression:" readonly>
+                                    <button class="btn btn-primary" id="btn-reg" (click)="primeniZaRegression()">Apply</button> 
+                                </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+         <!-- <div id="statistika" style="overflow-y: auto">
+            <div id="statNaslov">Statisticki pokazatelji</div>
+            <div [ngClass] = " ucitanCsv ? 'numcatVisible' : 'numcatHidden'" data-bs-toggle="collapse" data-bs-target="#numericke" aria-expanded="false" aria-controls="collapseExample"><div class="strelica">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-down" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg></div>Kolone sa numeričkim veličinama:</div>
+            <div class="collapse show" id="numericke">
+            <div *ngFor="let element of statistikaNum; index as i">
+                <div id="imeKolone" data-bs-toggle="collapse" attr.data-bs-target="#collapseNum{{i}}" aria-expanded="false" aria-controls="collapseExample">{{element.key}}<div class="strelica"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-down" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                    <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                  </svg></div>
+            </div>
+                <div class="collapse" id="collapseNum{{i}}" *ngFor="let item of element.data | keyvalue">
+                    <div class="uvuceno">
+                        <div>
+                            <div class="item">
+                                {{item.key}}: &nbsp; {{item.value}}
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+            </div>
+            <div [ngClass] = " ucitanCsv ? 'numcatVisible' : 'numcatHidden'" data-bs-toggle="collapse" data-bs-target="#kategorijske" aria-expanded="false" aria-controls="collapseExample"><div class="strelica">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-down" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg></div>Kolone sa kategorijskim veličinama:</div>
+            <div class="collapse show" id="kategorijske">
+            <div *ngFor="let element of statistikaCat; index as i">
+                <div class="mt-2" id="imeKolone" data-bs-toggle="collapse" attr.data-bs-target="#collapseCat{{i}}" aria-expanded="false" aria-controls="collapseExample">{{element.key}}<div class="strelica"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-down" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                    <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                  </svg></div></div>
+                <div class="collapse" id="collapseCat{{i}}" *ngFor="let item of element.data">
+                    <div class="uvuceno">
+                        <div class="item" *ngIf="item.imeKljucVC">
+                            {{item.imeKljucVC}}: {{item.ValidCount}}
+                        </div>
+                        <div class="item" *ngIf="item.imeKljucNC">
+                            {{item.imeKljucNC}}: {{item.NaCount}}
+                        </div>
+                        <div class="item" *ngIf="item.imeKljucUC">
+                            {{item.imeKljucUC}}: {{item.UniqueCount}}
+                        </div>
+                        <div *ngIf="item.Frequencies">
+                            <div *ngFor="let freq of item.Frequencies; index as i">
+                                <div *ngIf="i==0">
+                                    Most Common: &nbsp; <br> <div class="uvuceno">{{item.Frequencies[i][0]}}: &nbsp; {{item.Frequencies[i][1]}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="item.imeKljucF">
+                            {{item.imeKljucF}}:
+                            <div class="uvucenoBezMB" *ngFor="let freq of item.Frequencies">
+                                <div>{{freq[0]}}: &nbsp; {{freq[1]}} </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>  -->
+    </div>
+    
+    <!-- <button id="restore-columns" (click)="izbrisiSelektovaneKolone()">Deselektuj kolone</button>
+    <button id="selektovane-kolone" (click)="ispisiSelektovaneKolone()">Selektovane kolone</button>
+    <button id="sve-kolone" (click)="selectAllColumns()">Selektuj sve kolone</button>
+    <button id="restore-rows" (click)="izbrisiSelektovaneRedove()">Deselektuj redove</button>
+    <button id="selektovani-redovi" (click)="getSelectedRows()">Selektovani redovi</button> 
+    <button id="svi-redovi" (click)="selectAllRows()">Selektuj sve redove</button>
+    <button id="clear-tracker" (click)="obrisiIstoriju()">Obrisi istoriju</button>
+    <div id="tracker">
+        <p *ngIf="this.track != undefined"> {{this.track}}</p>
+    </div> -->
+
+
+    <div class="row d-flex align-items-center justify-content-between p-1 pt-4" >
+        <div class="col-md-9">
+            <div class="okvir visinaVizuelizacije">
+                <div class="naslov">Data visualization</div>
+                <div id="grafik"  style="width: 70%; height: 95%; margin: auto;" *ngIf="scatterplotImage"><img [src]="scatterplotImage" class="img-fluid " alt="Responsive image"></div>
+            </div>
+
+        </div>
+
+        <div class="col-md-3 ">
+            <div class="okvir visinaVizuelizacije ">
+                    <div class="naslov p-0 m-0">Data visualization method</div>
+                    <div id="header-help">
+                        <div id="helper-plot" class="helper" (mouseenter)="showTooltip('plot')">
+                            <div style="margin-left: 5.5px; margin-top: -1px">&#63;</div>
+                        </div>
+                    </div>
+                    <!-- scatterplot , boxplot, barplot, histogram, frequencyplot-->
+                <div class="row p-2"> <div class="col-md-12 text-center"> <button (click)="promena($event)" (click)="ucitajGrafik($event)" id="scatterplot" type="button" class="btn btn-secondary dugmiciG" style=" border-radius: 10px; background-color: #6070a7; box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);">Scatterplot</button> </div> </div>
+                <div class="row p-2"> <div class="col-md-12 text-center"> <button (click)="promena($event)" (click)="ucitajGrafik($event)" id="boxplot" type="button" class="btn btn-secondary dugmiciG" style=" border-radius: 10px; background-color: #6070a7; box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);">Boxplot</button> </div> </div>
+                <div class="row p-2"> <div class="col-md-12 text-center"> <button (click)="promena($event)" (click)="ucitajGrafik($event)" id="violinplot" type="button" class="btn btn-secondary dugmiciG" style="border-radius: 10px; background-color: #6070a7; box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);">Violinplot</button> </div> </div>
+                <div class="row p-2"> <div class="col-md-12 text-center"> <button (click)="promena($event)" (click)="ucitajGrafik($event)" id="barplot" type="button" class="btn btn-secondary dugmiciG" style=" border-radius: 10px; background-color: #6070a7; box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);">Barplot</button> </div> </div>
+                <div class="row p-2"> <div class="col-md-12 text-center"> <button (click)="promena($event)" (click)="ucitajGrafik($event)" id="histogram" type="button" class="btn btn-secondary dugmiciG" style=" border-radius: 10px; background-color: #6070a7; box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);">Histogram</button> </div> </div>
+                <div class="row p-2"> <div class="col-md-12 text-center"> <button (click)="promena($event)" (click)="ucitajGrafik($event)" id="hexbin" type="button" class="btn btn-secondary dugmiciG" style=" border-radius: 10px; background-color: #6070a7; box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);">Hexbin</button> </div> </div>
+                <div class="row p-2"> <div class="col-md-12 text-center"> <button (click)="promena($event)" (click)="ucitajGrafik($event)" id="densityplot" type="button" class="btn btn-secondary dugmiciG" style=" border-radius: 10px; background-color: #6070a7; box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);">Densityplot</button> </div> </div>
+                <!-- <div class="row p-2"> <div class="col-md-12 text-center"> <button  (click)="getPieplot(4)" id="densityplot" type="button" class="btn btn-secondary dugmiciG" style=" border-radius: 10px; background-color: #6070a7; box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);">Pieplot</button> </div> </div> -->
+
+            </div>
+        </div>
+    </div>
+
+
+  
+  <!-- Modal -->
+  <div  class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" style="background-color: #484864; color:#CED9FF;" >
+        <div class="modal-header d-flex align-items-center justify-content-between">
+          <button id="undoRedoDugmeIstorija" style="font-size:14px;color:#CED9FF;" (click)="tryUndoAction()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/>
+                <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/>
+              </svg>
+          </button>  
+          <button id="undoRedoDugmeIstorija" style="font-size:14px;color:#CED9FF;" (click)="tryRedoAction()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+              </svg>
+          </button> 
+          <button data-toggle="tooltip" title="Delete history" id="kantica" style="margin-left: 12px; font-size:16px;color:#CED9FF;" (click)="obrisiIstoriju()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+              </svg>
+          </button>
+          <h3 class="modal-title pt-2 mb-2 mt-0 m-5 p-5 pt-0 pb-0" id="exampleModalLabel">History</h3>
+          <!-- <h4><button type="button" id="clear-tracker" (click)="obrisiIstoriju()">Obrisi istoriju</button></h4> -->
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div *ngFor="let k of nizKomandi.slice().reverse(); let i = index" >
+                <span id="vreme" data-toggle="tooltip" title="{{ nizKomandiTooltip[nizKomandiTooltip.length - i - 1] }}">{{k}}</span>
+                <br>
+                <br>
+            </div>
+        </div>
+        <!--
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+        -->
+    </div>
+  </div>
+</div>
+
+<!-- Modal Save As -->
+<div  class="modal fade" id="ModalSaveAs" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+      <div class="modal-content"style="background: rgba(36, 38, 74, 0.95);">
+        <div class="modal-header " style="border-bottom: none; color: #eee">
+          <h3 class="modal-title" id="exampleModalLabel" style="font-size: large; margin-top: 10px; margin-left: 10px;">Save current dataset version</h3>
+          <button #btnexit type="button" (click)="vratiTekstiNaziv()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body justify-content-center align-items-center">
+            <div style="margin: auto; width: 80%;">
+                <input placeholder="Enter version name" type="text" id="imeVerzije" [(ngModel)]="nazivSnapshot" >  <!--(change)="daLiPostoji()" -->
+                <div id="nijeUnetoImeVerzije" style="color: #a16c8b;  visibility: hidden;">*Version name not given.</div>
+            </div>
+        </div>
+    
+        <div class="modal-footer d-flex" style="border-top: none;">
+          <!-- <button type="button" (click)="vratiTekstiNaziv()" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button> -->
+          <button type="button" (click)="this.daLiPostoji()" class="btn btn-secondary" id="sacuvajV">Save</button>
+        </div>
+
+    </div>
+  </div>
+</div>
+
+<ng-template #contentmdl let-modal>
+    <div class="modal-header" style= "background: rgba(36, 38, 74, 0.95); border-bottom: none; color: #eee;">
+      <h3 class="modal-title" id="modal-basic-title">Dataset version with given name already exists. Do you want to override it?</h3>
+      <!-- <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button> -->
+    </div>
+
+    <div class="modal-body justify-content-center d-flex align-items-center" style= "background: rgba(36, 38, 74, 0.95); color: #eee">
+        <div class=" d-flex justify-content-between" style="width: 60%; margin: auto;">
+            <button type="button" id="btn-otkazi"  class="btn btn-outline-dark" (click)="vratiTekst()" (click)="modal.close('Close click')">Cancel</button>
+            <button type="button" id="btn-zameni" class="btn btn-outline-dark" (click)="overrideSnapshot()" (click)="izadjiIzObaModala()" (click)="modal.close('Save click')" >Override</button>
+        </div>
+    </div>
+  </ng-template>
+
+  <ng-template #modalDeleteClose let-modal>
+    <div class="modal-header" style="height:50px; background-color: #ddddf6;">
+      <h3 class="modal-title pt-3" id="modal-basic-title">Delete</h3>
+    </div>
+    <div class="modal-body justify-content-center d-flex align-items-center ">
+        <div id="textDeleteClose" class="pt-3">
+            
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark btn-modal-close" (click)="modal.close('Close click')">Close</button>
+    </div>
+  </ng-template>
+
+  <ng-template #modalDelete let-modal>
+    <div class="modal-header" style= "background: rgba(36, 38, 74, 0.95); border-bottom: none; color: #eee;">
+      <h3 class="modal-title" id="modal-basic-title" style="margin-bottom: 0px; font-size:large">Delete</h3>
+      <button type="button" class="btn-close" (click)="modal.close('Close click')" aria-label="Close" style="box-shadow: none"></button>
+    </div>
+    <div class="modal-body  d-flex align-items-center " style= "background: rgba(36, 38, 74, 0.95); color: #eee">
+        <div id="textDelete">
+           
+        </div>
+    </div>
+    <div class="modal-footer  d-flex " style= "background: rgba(36, 38, 74, 0.95); border-top: none;">
+        <!-- <button type="button" id="btn-otkazi"  class="btn btn-outline-dark"  (click)="modal.close('Close click')">Close</button> -->
+        <button type="button" id="obrisiK" class="btn btn-outline-dark" (click)="brisanje()" (click)="modal.close('Save click')" >Delete</button>
+    </div>
+  </ng-template>
+
+  <ng-template #modalNew let-modal>
+    <div class="modal-header" style="height: 50px; border-bottom: none; background: rgba(36, 38, 74, 0.95); padding-bottom: 0px;" >
+      <h3 class="modal-title pt-3" id="modal-basic-title" style="color: #eee; font-size: large">Create New Row</h3>
+    </div>
+    <div class="modal-body justify-content-center d-flex align-items-center" style="background: rgba(36, 38, 74, 0.95); padding-bottom: 0px;">
+        <div id="textNew" class="pt-2">
+           <div class="d-flex justify-content-between" *ngFor="let head of getHeadAndType()" style="margin-bottom: 10px;">
+                <div class="d-flex justify-content-between" style="width: 100%; margin-right: 10px;">   
+                    <input placeholder="{{head.slice(1)}}" class="input-new-row" id="row{{head.slice(1)}}">
+                </div> 
+                    <div id="tipPolja" >*{{head[0]}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer"  style=" border-top: none; background: rgba(36, 38, 74, 0.95);">
+        <!-- <button type="button" id="btn-otkazi-newrow"  class="btn btn-outline-dark"  (click)="modal.close('Close click')">Close</button> -->
+        <button type="button" id="btn-kreirajnovired" class="btn btn-outline-dark" (click)="kreirajNoviRed()" (click)="modal.close('Save click')">Create</button>
+    </div>
+  </ng-template>
+
+  <ng-template #modalNaValue let-modal>
+    <div class="modal-header" style="height: 50px; border-bottom: none; background: rgba(36, 38, 74, 0.95); padding-bottom: 0px;" >
+      <h3 class="modal-title pt-3" id="modal-basic-title" style="color: #eee; font-size: large">Replace NA values with new value</h3>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')" style="border: none;"></button>
+    </div>
+    <div class="modal-body justify-content-center d-flex align-items-center" style="background: rgba(36, 38, 74, 0.95); padding-bottom: 0px; color: #eee;">
+        <div id="textNew" class="pt-2">
+            <h4>Enter new value:</h4>
+            <div class="d-flex justify-content-between">
+                <input type="text" id="newNaValue" >
+                <div style="margin-left: 5px; font-size: smaller;" id="tip-Vrednosti"></div>
+            </div>
+            <div id="checkNumerical">*You entered wrong data type</div>
+        </div>
+    </div>
+    <div class="modal-footer  d-flex justify-content-between" style=" border-top: none; background: rgba(36, 38, 74, 0.95); ">
+        <button type="button" id="btn-otkazi-newrow"  class="btn btn-outline-dark"  (click)="modal.close('Close click')" id="dugmePopup2">Close</button>
+        <button type="button" id="btn-kreirajnovired" class="btn btn-outline-dark" (click)="fillNaWithValue()" (click)="modal.close('Save click')" id="dugmePopup1">Replace</button>
+    </div>
+  </ng-template>
+
+  <ng-template #modalSnapshot let-modal >
+    <div class="modal-header" style="height: 50px; border-bottom: none; background: rgba(36, 38, 74, 0.95); padding-bottom: 0px;" >
+      <h3 class="modal-title" id="modal-basic-title" style="color: #eee; font-size: large">You have made changes!</h3>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')" style="border: none;"></button>
+    </div>
+    <div class="modal-body justify-content-center d-flex align-items-center " style="background: rgba(36, 38, 74, 0.95); padding-bottom: 0px; color: #eee;">
+        <div id="textDelete">
+            If you switch to another dataset version you will lose the changes you made. Are you sure you want to continue?
+        </div>
+    </div>
+    <div class="modal-footer  d-flex justify-content-between" style=" border-top: none; background: rgba(36, 38, 74, 0.95); ">
+        <button type="button" id="btn-zameni" class="btn btn-outline-dark" (click)="modal.close('Save click')" id="dugmePopup2">No</button>
+        <button type="button" id="btn-otkazi"  class="btn btn-outline-dark" (click)="discardChanges()" (click)="modal.close('Close click')" id="dugmePopup1">Yes</button>
+    </div>
+  </ng-template>
+  
+  <ng-template #modalBrisanjeVerzije let-modal>
+    <div class="modal-header" style="height: 50px; border-bottom: none; background: rgba(36, 38, 74, 0.95); padding-bottom: 0px;" >
+      <h3 class="modal-title" id="modal-basic-title" style="color: #eee; font-size: large">Delete Version</h3>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')" style="border: none;"></button>
+    </div>
+    <div class="modal-body justify-content-center d-flex align-items-center " style="background: rgba(36, 38, 74, 0.95); padding-bottom: 0px; color: #eee;">
+        <div id="textDelete">
+            Are you sure you want to delete current dataset version? 
+        </div>
+    </div>
+    <div class="modal-footer  d-flex justify-content-between" style=" border-top: none; background: rgba(36, 38, 74, 0.95); ">
+        <button type="button" id="btn-zameni" class="btn btn-outline-dark" (click)="modal.close('Save click')" id="dugmePopup2">Cancel</button>
+        <button type="button" id="btn-otkazi"  class="btn btn-outline-dark" (click)="izbrisiSnapshot()" (click)="modal.close('Close click')" id="dugmePopup1">Delete</button>
+    </div>
+  </ng-template>
+
+    <simple-notifications></simple-notifications>
+</div>
+</div>

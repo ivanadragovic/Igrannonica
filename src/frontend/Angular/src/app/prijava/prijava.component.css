@@ -1,0 +1,195 @@
+#centrirano
+{
+    display: flex;
+    justify-content: center;
+    clear: both;
+}
+
+.box{
+    width: 380px;
+    height: 500px;
+    background: rgba(32, 35, 66, 0.79);
+    position: relative;
+    border-radius: 3px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-sizing: border-box;
+    margin-top: -1%;
+}
+
+#divbox{
+    width: 360px;
+    height: 440px;
+    padding-bottom: 55px;
+    padding-left: 55px;
+    padding-right: 55px;
+    padding-top: 10px;
+    margin: auto;
+
+}
+
+#podaci1, #podaci2
+{
+    height: 30px;
+    color: #9f549f;
+}
+
+p{
+    color: white;
+    opacity: 0.5;
+    height: 30px;
+    float: left;
+    margin-top: 65px;
+    margin-bottom: 10px;
+    margin-left: 0px;
+    width: 300px;
+}
+
+a{
+    color: white;
+    opacity: 0.5;
+}
+
+input[type=text],input[type=password]{
+    width: 250px;
+    height: 45px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #fff;
+    color:white;
+}
+
+input:focus,textarea:focus,select:focus{
+    outline: none;
+}
+
+#dgm{
+    width: 250px;
+    height: 35px;
+    background: #9f549f;
+    border-radius: 3px;
+    border: none;
+    /* box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5); */
+    /* box-shadow: 6px 8px 9px 4px rgba(0, 0, 0, 0.25); */
+    color: #fff;
+}
+
+#dgm:hover{
+    background-color: #c264c2;
+    box-shadow: 0px 0px 20px 0.5px rgba(208, 155, 255, 0.5);
+    z-index: 100;
+}
+
+
+#dugmepr{
+    float: left;
+    color: #fff;
+    background: none;
+    border: none;
+    padding-left: 38px;
+    padding-right: 42px;
+}
+
+#dugmerg{
+    float: left;
+    color: #fff;
+    background: none;
+    border: none;
+    padding-left: 38px;
+    padding-right: 42px;
+    opacity: 0.8;
+}
+
+#divdugme{
+    float: left;
+   /* padding-top: 75px;*/
+   margin-top: 45px;
+    opacity: 1;
+}
+
+#poruka{
+
+    height: 30px;
+    color: #9f549f;
+}
+
+#divdugmad{
+    height: 50px;
+    padding-bottom: 100px;
+}
+
+#l2{
+    width: 125px;
+    height: 1.5px;
+    opacity: 1;
+    color: #9f549f;
+    margin: auto;
+    float: left;
+}
+
+#l1{
+    width: 125px;
+    height: 4px;
+    opacity: 1;
+    color: #9f549f;
+    margin: auto;
+    border-radius: 1px;
+    float: left;
+}
+
+#dugmePocetna:hover{
+    color: #fdf6fd;
+    /* border-color: #9f549f; */
+    background: #9f549fc4;
+}
+
+#dugmePocetna{
+
+    float: right;
+    margin-right: 50px;
+    margin-top: 45px;
+
+    width: 110px;
+    height: 40px;
+
+    background: #9f549f;
+    /* border: 3px solid rgba(243, 48, 95, 0.85); */
+    box-sizing: border-box;
+    border-radius: 15px;
+
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 33px;
+    color: #FFFFFF;
+}
+
+#footer
+{
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-transition: "color 9999s ease-out, background-color 9999s ease-out";
+    -webkit-transition-delay: 9999s;
+}
+
+span
+{
+    position: absolute;
+    transform: translate(-120%,60%);
+}
+
+#eye{
+    color:white;
+    opacity: 0.8;
+}
+#eye:hover{
+    color:rgb(127, 128, 192); 
+    opacity: 0.8;
+}

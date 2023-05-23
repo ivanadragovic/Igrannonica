@@ -1,0 +1,109 @@
+#oblast
+{
+    min-height: 400px;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-bottom: 70px;
+    border-radius: 25px;
+    align-content: center;
+    padding: 0px 20px 20px;
+    background: rgba(39, 39, 65, 0.827);
+    box-shadow: 13px 20px 29px rgba(0, 0, 0, 0.25);
+}
+
+#nav-tab
+{
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+    border-bottom: none;
+}
+
+.nav-link
+{
+    background: rgba(29, 33, 69, 0.92);
+    color: white;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    margin: -20px -5px 0;
+    border-top-left-radius: 45px 100px;
+    border-top-right-radius: 45px 100px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    position: relative;
+    width: 18%;
+    max-width: 200px;
+    min-width: 20px;
+    border: 1px solid #aaa;
+    border-bottom: none;
+    overflow: hidden;
+    z-index: 2;
+}
+
+.nav-link:last-child
+{
+    z-index: 1;
+}
+
+.nav-link.active
+{
+    background: rgba(39, 39, 65, 0.92);
+    color: #dbaac7;
+    border: none;
+    text-shadow: #222;
+    border: 1px solid #dbaac7;
+    border-bottom: none;
+    z-index: 10;   
+}
+  
+#podaci{
+    min-height: 500px;
+}
+
+#naziveksperimenta{
+    /*float: right;*/
+    transition: box-shadow .2s;
+    width: 220px;
+    /* margin-right: 15px; */
+    border: 2px solid #7f4b99 ;
+    color: #CED9FF;
+    background-color: #272741;
+    padding-top:6px;
+    align-items: center;
+    height: 40px;
+    box-sizing: border-box;
+    text-align: center;
+    box-shadow: 10px 20px 33px rgba(0, 0, 0, 0.25);
+    padding-left: 8px;
+    border-radius: 10px;
+    display: inline;
+    padding-top: 7px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+#naziveksperimenta:hover{
+    /* box-shadow: 0px 0px 10px 5px rgba(33, 18, 255, 0.2);  */
+    cursor: default;
+}
+#desnielement{
+    width: 330px;
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    float: right;
+}
+#box{
+    margin: 10px auto;
+    width: 100%;
+    text-align: center;
+    color: #CED9FF;
+    height: 300px;
+    align-items: center;
+    display: flex; 
+    justify-content: space-between;
+}
